@@ -51,15 +51,13 @@ def edit_date_idea(id):
     date_dict = model_to_dict(date)
     return jsonify(data = date_dict, status = {"code": 200, "msg": "OK"})
 
-# # delete route to remove a shelter by id
-# @shelter.route('/<id>', methods=["DELETE"])
-# def remove_shelter(id):
-#     # making sure that the id of the thing I get back is the same as the id in the url
-#     # if it is, then the peewee/SQL query/method of delete should execute when the execute method
-#     # is invoked 
-#     query = models.Shelter.delete().where(models.Shelter.id == id)
-#     # execute the delete query
-#     query.execute()
-#     # the instance should now be deleted and only this message should return. Check the db to make sure
-#     # that that particular record was indeed removed
-#     return jsonify(data = "Shelter was removed", status = {"code": 200, "msg": "OK"})
+#DELETE ROUTE
+@date.route('/<id>', methods=["DELETE"])
+def delete_date(id):
+    # making sure that the id of the thing I get back is the same as the id in the url
+    # if it is, then the peewee/SQL query/method of delete should execute when the execute method
+    # is invoked 
+    query = models.Date.delete().where(models.Date.id == id)
+    # execute the delete query
+    query.execute()
+    return jsonify(data = "Date deleted", status = {"code": 200, "msg": "OK"})
