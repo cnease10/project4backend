@@ -22,8 +22,11 @@ def get_all_dates():
 @date.route('/', methods=["POST"])
 def create_dates():
     payload = request.get_json()
+    print(type(payload), 'payload')
     #when the request is sent over from the client we turn it into json
     date = models.Date.create(**payload)
+    #**payload is short for below
+    # date = models.Date.create(name=payload['name'], description=payload['description'])
     #peewee has a create method which creates an entry in
     #our database - **payload is using the spread operator on payload
     date_dict = model_to_dict(date)
