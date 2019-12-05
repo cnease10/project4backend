@@ -25,8 +25,12 @@ def get_all_creates():
 def create_create():
     payload = request.get_json()
     print(type(payload), 'payload')
+    if not current_user.is_authenticated:
+        print(current_user)
+        return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in to create a dog'})
     #when the request is sent over from the client we turn it into json
-    create = models.Create.create(**payload)
+    payload['user'] = current_user.id
+    created = models.Create.create(**payload)
     #**payload is short for below
     # date = models.Date.create(name=payload['name'], description=payload['description'])
     #peewee has a create method which creates an entry in
