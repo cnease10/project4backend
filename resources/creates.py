@@ -28,7 +28,6 @@ def create_create():
     if not current_user.is_authenticated:
         print(current_user)
         return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in to create a dog'})
-    #when the request is sent over from the client we turn it into json
     payload['user'] = current_user.id
     created = models.Create.create(**payload)
     #**payload is short for below
@@ -60,10 +59,13 @@ def edit_create_idea(id):
 #DELETE ROUTE
 @create.route('/<id>', methods=["DELETE"])
 def delete_create(id):
-    # making sure that the id of the thing I get back is the same as the id in the url
-    # if it is, then the peewee/SQL query/method of delete should execute when the execute method
-    # is invoked 
-    query = models.Create.delete().where(models.Create.id == id)
-    # execute the delete query
-    query.execute()
+    #grab create to do a check on id and user id
+    create_to_delete = models.Create.get(id=id)
+    if not current_user.is_authenticated:
+        return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in'})
+    if dog_to_delete.owner.id is not current_user.id:
+        return jsonify(data={}, status={'code': 401, 'message': 'have to have created this'})
+   
+    dog_to_delete.delete()
+ 
     return jsonify(data = "Date deleted", status = {"code": 200, "msg": "OK"})
