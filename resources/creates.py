@@ -1,5 +1,6 @@
 import models
 from flask import Blueprint, jsonify, request
+from flask_login import current_user, login_required
 from playhouse.shortcuts import model_to_dict
 
 create = Blueprint('creates', 'create')
@@ -8,12 +9,16 @@ create = Blueprint('creates', 'create')
 @create.route('/', methods=["GET"])
 def get_all_creates():
     try:
-        creates = [model_to_dict(date) for date in models.Create.select()]
+        current_user_id = current_user.id
+        creates = [model_to_dict(date) for date in models.Create.select().where(
+            models.Create.user == current_user_id
+        )]
         #.select is a peewee method that finds all the dates on Date model
         print(creates)
         return jsonify(data=creates, status={"code": 200, "message": "Success"})
-    except models.DoesNotExist:
-        return jsonify(data={}, status={"code": 401, "message": "Can't get resources"})
+    except: 
+        current_user_id = None
+      
 
 #POST ROUTE
 @create.route('/', methods=["POST"])
