@@ -8,19 +8,39 @@ DATABASE = SqliteDatabase('dates.sqlite')
 class User(UserMixin, Model):
     username = CharField(unique=True)
     password = CharField()
+    # userdates: []
     class Meta: 
+        database_table = 'users'
         database = DATABASE
 
 class Date(Model):
-    username = CharField()
+    name = CharField()
     description = CharField()
     class Meta:
-        # database_table = 'dates'
+        database_table = 'dates'
         database = DATABASE
 
+class Create(Model):
+    name = CharField()
+    description = CharField()
+    user = ForeignKeyField(User, backref='userdates')
+    class Meta:
+        database_table = 'creates'
+        database = DATABASE
+
+# class DateRating(Model):
+#     # Userdate.date.name = 'Bumper Cars'
+#     # Create could be a star/save button -> Creates UserDate with 
+#     # date = date clicked in front end and user = user who clicked it
+#     user = ForeignKeyField(User, backref="userdates")
+#     date = ForeignKeyField(Date)
+#     liked = BooleanField()
+#     class Meta:
+#         database_table = 'dateratings'
+#         database = DATABASE
 
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([User, Date], safe=True)
+    DATABASE.create_tables([User, Date, Create], safe=True)
     print("TABLES Created")
     DATABASE.close()
