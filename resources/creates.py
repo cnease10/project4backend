@@ -34,8 +34,7 @@ def create_create():
     # date = models.Date.create(name=payload['name'], description=payload['description'])
     #peewee has a create method which creates an entry in
     #our database - **payload is using the spread operator on payload
-    create_dict = model_to_dict(create)
-    return jsonify(data=create_dict, status={"code": 200, "message": "Creation succesful"})
+    return jsonify(data = model_to_dict(created), status={"code": 200, "message": "Creation succesful"})
 
 # SHOW ROUTE
 @create.route('/<id>', methods=["GET"])
@@ -63,9 +62,9 @@ def delete_create(id):
     create_to_delete = models.Create.get(id=id)
     if not current_user.is_authenticated:
         return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in'})
-    if dog_to_delete.owner.id is not current_user.id:
+    if create_to_delete.user.id is not current_user.id:
         return jsonify(data={}, status={'code': 401, 'message': 'have to have created this'})
    
-    dog_to_delete.delete()
+    create_to_delete.delete()
  
     return jsonify(data = "Date deleted", status = {"code": 200, "msg": "OK"})
