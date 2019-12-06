@@ -13,10 +13,10 @@ def get_all_creates():
         creates = [model_to_dict(date) for date in models.Create.select().where(
             models.Create.user == current_user_id
         )]
-        #.select is a peewee method that finds all the dates on Date model
+        #.select is a peewee method that finds all the creates on Create model
         print(creates)
         return jsonify(data=creates, status={"code": 200, "message": "Success"})
-    except models.DoesNotExist:
+    except:
         return jsonify(data={}, status={"code": 401, "message": "Can't get resources"})
 
       
