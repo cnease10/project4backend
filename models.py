@@ -1,9 +1,16 @@
+import os 
 from peewee import *
 from flask_login import UserMixin
 #UserMixin gives our User class default features
 #Mixins are smal classes that add some specific feature 
 #UserMixin also always us to set up our session
-DATABASE = SqliteDatabase('dates.sqlite')
+from playhouse.db_url import connect #need this for heroku
+
+if 'ON_HEROKU' in os.environ:
+    DATABASE = connect(os.environ.get('DATABASE_URL'))
+else:
+    DATABASE = SqliteDatabase('dates.sqlite')
+
 
 class User(UserMixin, Model):
     username = CharField(unique=True)

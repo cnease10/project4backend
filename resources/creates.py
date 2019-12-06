@@ -11,7 +11,7 @@ def get_all_creates():
     try:
         current_user_id = current_user.id
         creates = [model_to_dict(date) for date in models.Create.select().where(
-            models.Create.user == current_user_id
+            models.Create.user.id == current_user_id
         )]
         #.select is a peewee method that finds all the dates on Date model
         print(creates)

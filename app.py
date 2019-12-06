@@ -41,16 +41,20 @@ def after_request(response):
     return response
 
 
-CORS(app, origins=['http://localhost:3000'], supports_credentials=True) 
+# CORS(app, origins=['http://localhost:3000'], supports_credentials=True) 
 #supports_credentials = true means we allow cookies to be sent to the server
-CORS(date, origins=['http://localhost:3000'], supports_credentials=True) 
+CORS(date, origins=['http://localhost:3000', 'https://react-find-a-date-idea.herokuapp.com'], supports_credentials=True) 
 app.register_blueprint(date,  url_prefix='/api/v1/dates') 
-CORS(user, origins=['http://localhost:3000'], supports_credentials=True) 
+CORS(user, origins=['http://localhost:3000', 'https://react-find-a-date-idea.herokuapp.com'], supports_credentials=True) 
 app.register_blueprint(user,  url_prefix='/api/v1/users') 
-CORS(create, origins=['http://localhost:3000'], supports_credentials=True) 
+CORS(create, origins=['http://localhost:3000', 'https://react-find-a-date-idea.herokuapp.com'], supports_credentials=True) 
 app.register_blueprint(create,  url_prefix='/api/v1/creates') 
 
 # Run the app 
+if 'ON_HEROKU' in os.environ:
+    print('hitting')
+    models.initialize()
+
 if __name__ == '__main__':
     models.initialize()
     app.run(debug=DEBUG, port=PORT)
