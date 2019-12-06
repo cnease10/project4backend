@@ -16,8 +16,7 @@ def get_all_creates():
         #.select is a peewee method that finds all the dates on Date model
         print(creates)
         return jsonify(data=creates, status={"code": 200, "message": "Success"})
-    except: 
-        current_user_id = None
+   
       
 
 #POST ROUTE
@@ -49,11 +48,18 @@ def show_one_create(id):
 def edit_create_idea(id):
     payload = request.get_json()
     # if the id of the thing I am searching is == to the id in the url, execute this peewee method
-    query = models.Create.update(**payload).where(models.Create.id == id)
-    query.execute()
-    create = models.Create.get_by_id(id)
-    create_dict = model_to_dict(create)
-    return jsonify(data = create_dict, status = {"code": 200, "msg": "OK"})
+    create_to_update = models.Create.get(id=id)
+    if not current_user.is_authenticated:
+        return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in '})
+    if create_to_update.user.id is not current_user.id:
+        return jsonify(data={}, status={'code': 401, 'message': 'you can only update your own date'})
+    create_to_update.update(
+        name=payload['name'],
+        description=payload['description']
+    ).execute()
+
+    update_create_dict = model_to_dict(create_to_update)
+    return jsonify(data=update_create_dict, status={'code': 200, 'message': 'success'})
 
 #DELETE ROUTE
 @create.route('/<id>', methods=["DELETE"])
