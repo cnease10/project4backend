@@ -55,10 +55,13 @@ def edit_create_idea(id):
         return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in '})
     if create_to_update.user.id is not current_user.id:
         return jsonify(data={}, status={'code': 401, 'message': 'you can only update your own date'})
+    # query = models.Create.update(**payload).where(models..id == id)
+    # if current_user.is_authenticated:
+    #     query.execute()
     create_to_update.update(
         name=payload['name'],
         description=payload['description']
-    ).execute()
+    ).where(models.Create.id==id).execute()
 
     update_create_dict = model_to_dict(create_to_update)
     return jsonify(data=update_create_dict, status={'code': 200, 'message': 'success'})
