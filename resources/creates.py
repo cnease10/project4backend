@@ -16,7 +16,9 @@ def get_all_creates():
         #.select is a peewee method that finds all the dates on Date model
         print(creates)
         return jsonify(data=creates, status={"code": 200, "message": "Success"})
-   
+    except models.DoesNotExist:
+        return jsonify(data={}, status={"code": 401, "message": "Can't get resources"})
+
       
 
 #POST ROUTE
