@@ -11,7 +11,7 @@ def get_all_creates():
     try:
         current_user_id = current_user.id
         creates = [model_to_dict(date) for date in models.Create.select().where(
-            models.Create.user.id == current_user_id
+            models.Create.user == current_user_id
         )]
         #.select is a peewee method that finds all the dates on Date model
         print(creates)
@@ -67,12 +67,20 @@ def edit_create_idea(id):
 @create.route('/<id>', methods=["DELETE"])
 def delete_create(id):
     #grab create to do a check on id and user id
-    create_to_delete = models.Create.get(id=id)
-    if not current_user.is_authenticated:
-        return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in'})
-    if create_to_delete.user.id is not current_user.id:
-        return jsonify(data={}, status={'code': 401, 'message': 'have to have created this'})
+    query = models.Create.delete().where(models.Create.id == id)
+    if current_user.is_authenticated:
+        query.execute()
+        return jsonify(data = "date deleted", status = {"code": 200, "msg": "OK"})
+    else:
+        return jsonify(data={}, status = {'code': 401, 'msg': "You are not authorized to do that"})
+    # create_to_delete = models.Create.get(id=id)
+    # if not current_user.is_authenticated:
+    #     return jsonify(data={}, status={'code': 401, 'message': 'You must be logged in'})
+    # if create_to_delete.user.id is not current_user.id:
+    #     return jsonify(data={}, status={'code': 401, 'message': 'have to have created this'})
    
-    create_to_delete.delete()
+    # query = 
+
+    # query.execute()
  
-    return jsonify(data = "Date deleted", status = {"code": 200, "msg": "OK"})
+    # return jsonify(data = "Date deleted", status = {"code": 200, "msg": "OK"})
