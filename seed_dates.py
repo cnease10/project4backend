@@ -10,4 +10,8 @@ with open('./date-ideas.csv', 'r') as f:
             'description': date_reader['description'].strip()
         }
         print(date)
-        models.Date.create(**date)
+        try:
+            models.Date.create(**date)
+        except:
+            del date['date_id']
+            models.Date.create(**date)
