@@ -21,7 +21,6 @@ class User(UserMixin, Model):
         database = DATABASE
 
 class Date(Model):
-    date_id = IntegerField(primary_key=True)
     name = CharField()
     description = CharField()
     class Meta:
