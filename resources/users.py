@@ -39,7 +39,7 @@ def login():
             login_user(user)
             return jsonify(data=user_dict, status={"code": 200, "message": "Log in Successful"})
         else:
-            return jsonify(data={}, satus={"code": 400, "message": "Username or password incorrect"})
+            return jsonify(data={}, status={"code": 400, "message": "Username or password incorrect"})
     except models.DoesNotExist:
-        return jsonify(data={}, satus={"code": 400, "message": "Username or password incorrect"})
+        return jsonify(data={}, status={"code": 400, "message": "Username or password incorrect"})
         

@@ -22,14 +22,14 @@ class User(UserMixin, Model):
 
 class Date(Model):
     name = CharField()
-    description = CharField()
+    description = TextField()
     class Meta:
         database_table = 'dates'
         database = DATABASE
 
 class Create(Model):
     name = CharField()
-    description = CharField()
+    description = TextField()
     user = ForeignKeyField(User, backref='userdates')
     class Meta:
         database_table = 'creates'
